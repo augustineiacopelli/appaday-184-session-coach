@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="apple-touch-icon" href="https://augustineiacopelli.github.io/appaday/icons/184.png">
+<meta name="apple-mobile-web-app-title" content="SessionCoach">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="manifest" href="https://augustineiacopelli.github.io/appaday/manifests/184.webmanifest">
+<script src="https://augustineiacopelli.github.io/appaday/save.js" defer></script>
+<title>Session Coach</title>
+<style>
+:root{
+  --ink:#313134;--night:#12263B;--navy:#1A3450;--deep:#1C4775;--teal:#4DA8A9;--teal-dark:#377778;
+  --rose:#FD93A4;--rose-soft:#FFAEBB;--coral:#FF9374;--mist:#E3FFFF;--cloud:#F2F2F2;
+  --fs-xs:clamp(12px,3.3vw,13px);--fs-s:clamp(13px,3.7vw,15px);--fs-m:clamp(15px,4.2vw,17px);
+  --fs-in:clamp(16px,4.3vw,17px);--fs-l:clamp(17px,4.9vw,21px);--fs-xl:clamp(21px,6.2vw,28px);
+  --fs-hero:clamp(46px,15vw,76px);--line:rgba(227,255,255,.32);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:var(--fs-m);line-height:1.45;-webkit-text-size-adjust:100%}
+body{overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+#hdr{flex:0 0 auto;display:flex;align-items:center;gap:10px;background:var(--navy);padding:calc(env(safe-area-inset-top) + 8px) 14px 8px;border-bottom:1px solid rgba(242,242,242,.12)}
+.num{background:var(--teal);color:var(--navy);font-weight:800;border-radius:8px;padding:2px 8px;font-size:var(--fs-s)}
+.ttl{font-weight:700;font-size:var(--fs-l);flex:1}
+.portal{color:var(--teal);font-weight:600;text-decoration:none;min-height:44px;display:flex;align-items:center;padding:0 4px;font-size:var(--fs-s)}
+#main{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wrap{max-width:640px;margin:0 auto;padding:14px 14px 28px}
+#tabs{flex:0 0 auto;display:flex;background:var(--navy);border-top:1px solid rgba(242,242,242,.12);padding-bottom:env(safe-area-inset-bottom)}
+#tabs button{flex:1;background:none;border:0;color:var(--mist);min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:var(--fs-xs);border-top:3px solid transparent}
+#tabs button svg{width:22px;height:22px}
+#tabs button[aria-current="page"]{color:var(--teal);border-top-color:var(--teal);font-weight:700}
+body.full #hdr,body.full #tabs{display:none}
+.screen{display:none}
+.screen.on{display:block}
+h2{font-size:var(--fs-xl);margin:6px 0 10px;line-height:1.2}
+h3{font-size:var(--fs-s);margin:0 0 8px;color:var(--mist);text-transform:uppercase;letter-spacing:.06em}
+h3.sp{margin-top:16px}
+.sub{color:var(--mist);font-size:var(--fs-s);margin:0 0 10px}
+.card{background:var(--deep);border-radius:14px;padding:14px;margin:0 0 12px}
+.banner{background:var(--navy);border-left:5px solid var(--rose);border-radius:10px;padding:10px 12px;margin:0 0 12px;font-weight:700;font-size:var(--fs-s)}
+.note{border:1px solid var(--line);color:var(--mist);font-size:var(--fs-s)}
+.lbl{display:block;font-size:var(--fs-s);color:var(--mist);margin:10px 0 4px}
+.lbl:first-child{margin-top:0}
+input[type=text],input[type=password],input[type=number],input[type=date],textarea{width:100%;background:var(--night);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-height:46px;font-size:var(--fs-in);color:#fff}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+textarea{resize:vertical;line-height:1.4}
+input[type=date]{color-scheme:dark}
+.count{text-align:right;font-size:var(--fs-xs);color:var(--mist);margin-top:3px}
+.warn{color:var(--rose-soft);font-size:var(--fs-s);margin:6px 0 0}
+.hidden{display:none !important}
+.btn{min-height:48px;border-radius:12px;border:1.5px solid var(--mist);background:transparent;color:#fff;font-weight:700;padding:10px 16px;font-size:var(--fs-m)}
+.btn:active{background:rgba(227,255,255,.12)}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.btn.primary:hover,.btn.primary:active{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
+.btn.danger{border-color:var(--coral);color:var(--coral);background:var(--navy)}
+.btn.big{width:100%;min-height:62px;font-size:var(--fs-l);margin:0 0 12px}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;color:var(--mist);text-decoration:underline;min-height:44px;padding:0 6px;font-size:var(--fs-s)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row > .btn{flex:1 1 140px}
+.actions{display:flex;flex-direction:column;gap:10px;margin:6px 0 12px}
+.status{font-size:var(--fs-s);color:var(--mist);min-height:1.4em;margin:8px 0 0}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.ck{display:flex;align-items:center;gap:10px;min-height:46px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:transparent;color:#fff;text-align:left;font-size:var(--fs-s)}
+.ck .bx{flex:0 0 22px;width:22px;height:22px;border:2px solid var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.ck .bx svg{width:16px;height:16px;opacity:0}
+.ck[aria-pressed="true"]{border-color:var(--teal)}
+.ck[aria-pressed="true"] .bx{background:var(--teal)}
+.ck[aria-pressed="true"] .bx svg{opacity:1}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1 1 0;min-width:46px;min-height:46px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:#fff;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;font-weight:600}
+.switch{flex:0 0 auto;width:64px;height:46px;border:0;background:none;position:relative;padding:0}
+.switch::before{content:"";position:absolute;left:4px;top:7px;width:56px;height:32px;border-radius:16px;background:rgba(227,255,255,.25);transition:background .15s}
+.switch::after{content:"";position:absolute;left:8px;top:11px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch[aria-checked="true"]::before{background:var(--teal)}
+.switch.rose[aria-checked="true"]::before{background:var(--rose)}
+.switch[aria-checked="true"]::after{transform:translateX(24px)}
+.rangewrap{display:flex;align-items:center;gap:12px}
+input[type=range]{flex:1;accent-color:var(--teal);min-height:44px}
+.rangewrap.unset input{opacity:.45}
+.rangewrap output{min-width:84px;text-align:right;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:46px;border-radius:23px;border:1.5px solid var(--coral);background:var(--navy);color:var(--coral);padding:8px 14px;font-weight:600;font-size:var(--fs-s)}
+.chip[aria-pressed="true"]{background:var(--coral);color:var(--navy)}
+.center{text-align:center}
+/* lock and consent */
+.lockbox{max-width:460px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 28px) 18px 28px;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--fs-l);margin-bottom:18px}
+.lockbox input{margin-bottom:10px}
+.warnbox{border:1.5px solid var(--coral);color:var(--coral);border-radius:12px;padding:10px 12px;font-size:var(--fs-s);margin:4px 0 14px;background:var(--night)}
+.msg{min-height:1.5em;color:var(--rose);font-size:var(--fs-s);margin:4px 0 8px}
+blockquote{margin:0 0 20px;background:var(--navy);border-left:5px solid var(--teal);padding:16px;border-radius:12px;font-size:var(--fs-l);line-height:1.5}
+/* results */
+.ringwrap{display:flex;flex-direction:column;align-items:center;margin:6px 0 10px}
+.ring{position:relative;width:min(220px,58vw);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .tot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .tot b{font-size:var(--fs-hero);line-height:1}
+.ring .tot span{color:var(--mist);font-size:var(--fs-s)}
+.halves{display:flex;gap:10px;width:100%;margin-top:12px}
+.halves div{flex:1;background:var(--navy);border-radius:12px;padding:10px;text-align:center}
+.halves small{display:block;color:var(--mist);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em}
+.halves b{font-size:var(--fs-xl)}
+.meta{color:var(--mist);font-size:var(--fs-s);text-align:center}
+.item{margin:0 0 10px}
+.item .top{display:flex;justify-content:space-between;gap:8px;font-size:var(--fs-s)}
+.bar{height:8px;border-radius:4px;background:rgba(227,255,255,.18);margin-top:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:4px}
+.fb p{margin:2px 0 12px}
+.fb .k{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.k.well{color:var(--rose-soft)}
+.k.grow,.k.q{color:var(--mist)}
+/* history */
+.chartwrap{margin:0 0 6px}
+.chartwrap svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:var(--fs-xs);color:var(--mist);margin:0 0 14px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
+.hcard{display:flex;gap:10px;align-items:center;cursor:pointer}
+.hcard .info{flex:1;min-width:0}
+.hcard .d{font-weight:700}
+.hcard .i{color:var(--mist);font-size:var(--fs-s)}
+.hcard .left{color:var(--mist);font-size:var(--fs-xs)}
+.hcard .sc{font-size:var(--fs-xl);font-weight:800;min-width:56px;text-align:right}
+.empty{color:var(--mist);text-align:center;padding:24px 8px}
+/* print screen */
+.notice{background:var(--navy);border:1.5px solid var(--rose);border-radius:12px;padding:12px;font-weight:700;margin:0 0 14px}
+.preview{background:#fff;color:#000;border-radius:10px;padding:10px;overflow:hidden;margin-bottom:12px}
+.preview .pf{width:7.5in;transform-origin:top left}
+.preview .pf-page{border-bottom:2px dashed #888;padding-bottom:18px;margin-bottom:18px}
+.preview .pf-page:last-child{border-bottom:0;margin-bottom:0}
+/* settings */
+details{border-top:1px solid rgba(242,242,242,.14);padding:4px 0}
+summary{min-height:44px;display:flex;align-items:center;font-weight:600;cursor:pointer}
+.wgrid{display:grid;grid-template-columns:1fr 92px;gap:8px 10px;align-items:center}
+.wgrid input{min-height:44px}
+/* sheet */
+#ov{position:fixed;inset:0;background:rgba(5,12,22,.72);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--navy);width:100%;max-width:640px;max-height:90dvh;overflow-y:auto;border-radius:18px 18px 0 0;padding:0 0 calc(env(safe-area-inset-bottom) + 16px);animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sh-head{padding:16px 16px 10px;font-size:var(--fs-l);font-weight:800}
+.sheet.coral .sh-head{background:var(--coral);color:var(--navy);border-radius:18px 18px 0 0;padding-bottom:14px}
+.sh-body{padding:12px 16px 4px}
+.sh-body .banner{background:var(--night)}
+.sh-acts{display:flex;flex-direction:column;gap:10px;padding:8px 16px 0}
+.opener{font-weight:700;margin:0 0 12px}
+.alert{color:var(--coral);font-size:var(--fs-xl);font-weight:800;line-height:1.25;margin:0 0 12px}
+.steps p{margin:0 0 10px}
+.steps h4{margin:14px 0 6px;font-size:var(--fs-s);color:var(--mist);text-transform:uppercase;letter-spacing:.06em}
+.steps ul{margin:0 0 10px;padding-left:20px}
+.steps li{margin:0 0 6px}
+.steps a{color:var(--teal);font-weight:700}
+.foot{color:var(--mist);font-size:var(--fs-s);border-top:1px solid rgba(242,242,242,.14);padding-top:10px;margin-top:6px}
+.pick{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:52px;background:var(--deep);border:0;border-radius:12px;padding:10px 14px;margin:0 0 8px;color:#fff;text-align:left}
+.pick b{font-size:var(--fs-l)}
+#printArea{display:none}
+@page{size:letter;margin:0.5in}
+@media print{
+  html,body{height:auto !important;overflow:visible !important;background:#fff !important;color:#000 !important}
+  body > *:not(#printArea){display:none !important}
+  #printArea{display:block !important}
+}
+</style>
+</head>
+<body class="full">
+<div id="app">
+  <header id="hdr">
+    <span class="num">184</span>
+    <span class="ttl">Session Coach</span>
+    <a class="portal" href="https://augustineiacopelli.github.io/appaday/">Portal</a>
+  </header>
+  <main id="main"><div class="wrap">
+
+    <section id="scr-lock" class="screen on">
+      <div class="lockbox">
+        <div class="brand"><span class="num">184</span> Session Coach</div>
+        <div id="lock-setup" class="hidden">
+          <h2>Create a passphrase</h2>
+          <p class="sub">Everything you save is encrypted on this device with this passphrase. Nothing leaves your phone.</p>
+          <input type="password" id="l-new1" placeholder="New passphrase, 8 characters or more" autocomplete="new-password" aria-label="New passphrase">
+          <input type="password" id="l-new2" placeholder="Type it again" autocomplete="new-password" aria-label="Type the passphrase again">
+          <p class="warnbox">If you forget this passphrase, your notes cannot be recovered. No one can reset it for you.</p>
+          <p id="l-msg1" class="msg"></p>
+          <button id="l-create" class="btn primary big">Create and continue</button>
+          <button id="l-restore" class="link">Restore from an encrypted backup</button>
+        </div>
+        <div id="lock-unlock" class="hidden">
+          <h2>Unlock</h2>
+          <p class="sub">Enter your passphrase to open your notes.</p>
+          <input type="password" id="l-pass" placeholder="Passphrase" autocomplete="current-password" aria-label="Passphrase">
+          <p id="l-msg2" class="msg"></p>
+          <button id="l-go" class="btn primary big">Unlock</button>
+          <button id="l-wipe" class="link">Wipe and start over</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="scr-consent" class="screen">
+      <div class="lockbox">
+        <h2>Before you begin</h2>
+        <p class="sub">Ask him in your own voice.</p>
+        <blockquote id="c-script"></blockquote>
+        <button id="c-yes" class="btn primary big">He said yes</button>
+        <button id="c-notes" class="btn big">Notes only</button>
+        <button id="c-later" class="link">Not now, go to History</button>
+      </div>
+    </section>
+
+    <section id="scr-session" class="screen">
+      <div class="banner">Always truthful. Her decision. Help him support her.</div>
+      <div class="card note">No identifying details. Do not type his name, her name, dates of birth or ID numbers here.</div>
+      <p id="f-editing" class="sub hidden">Editing a saved session.</p>
+      <div class="card">
+        <label class="lbl" for="f-init">Initials</label>
+        <input type="text" id="f-init" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <p id="f-init-warn" class="warn hidden">That looks like a name. Please use initials only.</p>
+      </div>
+      <div class="card"><h3>Areas covered</h3><div id="f-areas" class="checks"></div></div>
+      <div class="card">
+        <h3>Talk share</h3>
+        <p class="sub">Your estimate of how much of the talking you did.</p>
+        <div id="f-talkwrap" class="rangewrap unset">
+          <input type="range" id="f-talk" min="10" max="90" step="5" value="50" aria-label="Talk share percent">
+          <output id="f-talk-out">Not set</output>
+        </div>
+        <button id="f-talk-clear" class="link">Clear estimate</button>
+      </div>
+      <div class="card">
+        <h3>Open questions</h3>
+        <p class="sub">How many of your questions invited him to talk. 0 is none, 4 is nearly all.</p>
+        <div id="f-openq" class="seg"></div>
+      </div>
+      <div class="card"><h3>Followed his lead</h3><div id="f-lead" class="seg"></div></div>
+      <div class="card"><div class="toggle-row"><span>Ended with hope</span><button id="f-hope" class="switch rose" role="switch" aria-checked="false" aria-label="Ended with hope"></button></div></div>
+      <div class="card">
+        <h3>Next steps</h3>
+        <label class="lbl" for="f-his">His commitment</label>
+        <textarea id="f-his" maxlength="140" rows="2"></textarea>
+        <div class="count" id="c-his">0 of 140</div>
+        <label class="lbl" for="f-mine">Your commitment</label>
+        <textarea id="f-mine" maxlength="140" rows="2"></textarea>
+        <div class="count" id="c-mine">0 of 140</div>
+        <label class="lbl" for="f-next">Next meeting date</label>
+        <input type="date" id="f-next">
+      </div>
+      <div class="card">
+        <h3>Materials given</h3><div id="f-mat" class="checks"></div>
+        <h3 class="sp">Referrals given</h3><div id="f-ref" class="checks"></div>
+      </div>
+      <div class="card">
+        <h3>Spiritual conversation</h3><div id="f-spirit" class="seg"></div>
+        <h3 class="sp">Gospel presented</h3><div id="f-gospel" class="seg"></div>
+      </div>
+      <div class="card">
+        <h3>Flags</h3>
+        <p class="sub">Tap a flag to open its steps. Only the flag type is saved.</p>
+        <div id="f-flags" class="chips"></div>
+      </div>
+      <div class="card">
+        <div class="toggle-row"><span>Keep longer</span><button id="f-keep" class="switch" role="switch" aria-checked="false" aria-label="Keep longer"></button></div>
+        <p id="f-keep-note" class="sub"></p>
+      </div>
+      <div class="actions">
+        <button id="f-save" class="btn primary big">Save and score</button>
+        <button id="f-cancel" class="btn hidden">Cancel edit</button>
+      </div>
+    </section>
+
+    <section id="scr-results" class="screen">
+      <p id="r-meta" class="meta"></p>
+      <div class="ringwrap">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(227,255,255,.16)" stroke-width="10"></circle>
+            <circle id="r-arc" cx="60" cy="60" r="52" fill="none" stroke="#4DA8A9" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 400"></circle>
+          </svg>
+          <div class="tot"><b id="r-total">0</b><span>out of 100</span></div>
+        </div>
+        <div class="halves">
+          <div><small>Coverage</small><b id="r-cov">0</b> of 50</div>
+          <div><small>Listening</small><b id="r-lis">0</b> of 50</div>
+        </div>
+      </div>
+      <div class="card fb">
+        <div class="k well">Went well</div><p id="fb-well"></p>
+        <div class="k grow">To grow</div><p id="fb-grow"></p>
+        <div class="k q">Next question to try</div><p id="fb-q"></p>
+      </div>
+      <div class="card"><h3>Breakdown</h3><div id="r-items"></div></div>
+      <div class="actions">
+        <button id="r-print" class="btn primary">Print drafted form</button>
+        <div class="row">
+          <button id="r-done" class="btn">Done</button>
+          <button id="r-edit" class="btn">Edit session</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="scr-history" class="screen">
+      <h2>History</h2>
+      <div id="h-chart" class="chartwrap"></div>
+      <div class="legend">
+        <span><i style="background:#fff"></i>Total</span>
+        <span><i style="background:#4DA8A9"></i>Coverage</span>
+        <span><i style="background:#FD93A4"></i>Listening</span>
+      </div>
+      <div id="h-list"></div>
+    </section>
+
+    <section id="scr-print" class="screen">
+      <h2>Print</h2>
+      <p class="notice">Check that nothing you typed identifies him before printing.</p>
+      <button id="p-blank" class="btn primary big">Print blank form</button>
+      <button id="p-draft" class="btn big">Print drafted form from a session</button>
+      <div class="card">
+        <div class="toggle-row"><span>Preview</span><button id="p-prev" class="switch" role="switch" aria-checked="false" aria-label="Preview"></button></div>
+        <p id="p-which" class="sub">Preview shows the blank form.</p>
+      </div>
+      <div id="p-preview" class="preview hidden"></div>
+    </section>
+
+    <section id="scr-settings" class="screen">
+      <h2>Settings</h2>
+      <div id="s-body"></div>
+    </section>
+
+  </div></main>
+  <nav id="tabs" aria-label="Main">
+    <button data-tab="session"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1 -11.6 7.1L4 20l1.2 -4.6A8 8 0 1 1 21 12z"/></svg>Session</button>
+    <button data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4 -4 3 3 5 -6"/></svg>History</button>
+    <button data-tab="print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>Print</button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Settings</button>
+  </nav>
+</div>
+<div id="printArea"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* Constants and default content */
+var DAY=86400000, ITER=600000, CHECK='sessioncoach ok', DBN='sessioncoach', LSP='sessioncoach.';
+var CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="#1A3450" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+var AREAS=[
+  {id:'heart',name:'His heart and story'},
+  {id:'her',name:'Her and the baby'},
+  {id:'support',name:'Support and provision'},
+  {id:'faith',name:'Faith'}
+];
+var DEFAULT_POOL={
+  heart:['When you first heard she might be pregnant, what went through your head?','What part of this keeps you up at night, and what part, if any, are you excited about?','Tell me about your dad. What did he get right, and what do you want to do differently?','What kind of dad do you want to be?'],
+  her:['How are things between you and her right now?','What do you think she needs from you while she decides?','How are you handling not being the one who decides?','What does she need from you this week?','What do you see for the two of you?'],
+  support:['Who is in your corner?','What worries you most about providing?','How is work right now?','Would it help to take the six week parenting and relationship classes together?'],
+  faith:['Has faith been part of your life?','When things get heavy, who or what do you turn to?','Have you ever thought of God as a Father who does not walk out?','Can I share what gives me hope?','What can I pray for?']
+};
+var WELCOME_LINE='Most guys never walk in here. It says something that you did.';
+var WELCOME_QS=['What made you want to come in today?','How are you really doing with all of this?'];
+var FAITH_BRIDGE='We want to support you in every part of your life: physical, emotional, relational and spiritual.';
+var NEXT_Q='What is one thing you will do for her or the baby this week?';
+var DEFAULT_KW={
+  heart:'dad, father, scared, worried, excited, afraid, feel',
+  her:'her, girlfriend, baby, together, us, relationship',
+  support:'job, work, money, rent, bills, family, friends, support',
+  faith:'God, pray, prayer, church, Jesus, faith, Bible'
+};
+var DEFAULT_STARTERS='what, how, tell me, describe, help me understand, walk me through';
+var DEFAULT_WEIGHTS={cov:{heart:10,her:10,support:10,faith:20},lis:{talk:15,openq:10,lead:10,next:10,hope:5}};
+var LIS_ITEMS=[['talk','Talk share'],['openq','Open questions'],['lead','Followed his lead'],['next','Next steps'],['hope','Ended with hope']];
+var DEFAULT_CONSENT='I’m here to listen, not to judge. To help me grow as an advocate I’d like to keep a few private notes about how our conversation went, never your name or story. Is that okay?';
+var MATERIALS=[['dad','Dad Challenge'],['bible','Bible'],['other','Other']];
+var REFERRALS=[['classes','Classes'],['std','STD Testing'],['church','Church'],['therapy','Therapy'],['doctor','Doctor'],['kancare','KanCare'],['rm','Resource Manager']];
+var FLAGS=[
+  {id:'danger',chip:'Danger right now',title:'1. Danger right now'},
+  {id:'suicide',chip:'Suicide or self harm',title:'2. Suicide or self harm'},
+  {id:'harm',chip:'Harm to her, the baby or others',title:'3. Harm to her, the baby or others'},
+  {id:'abuse',chip:'Abuse or control',title:'4. Abuse or control in the relationship'},
+  {id:'pressure',chip:'Pressure on her decision',title:'5. Pressure on her decision'},
+  {id:'child',chip:'A child may be at risk',title:'6. A child may be at risk'},
+  {id:'traffic',chip:'Possible trafficking',title:'7. Possible trafficking'}
+];
+var FLAG_OPENER='Tell the director or staff member on duty before he leaves.';
+var FLAG_FOOT='General guidance until your center supplies its own protocol.';
+var DEFAULT_FLAGS={
+  danger:'Call 911.\nKeep yourself and others safe.\nThen tell the director.',
+  suicide:'Stay with him and do not let him leave alone.\nAsk him directly and calmly whether he is thinking about ending his life.\nBring in the director, and connect him with 988 (call or text).\nCall 911 if the danger is immediate.',
+  harm:'Bring in the director right away.\nDo not promise confidentiality.\nCall 911 if the threat is specific or imminent.',
+  abuse:'Bring in the director and give the numbers to whoever is being hurt:\n* Kansas Crisis Hotline: 1.888.363.2287\n* Wichita Family Crisis Center, 24 hours: 316.267.7233 (serves men too)\n* Catholic Charities Harbor House: 316.263.6000 or 866.899.5522\n* National Domestic Violence Hotline: 1.800.799.7233, or text START to 88788',
+  pressure:'Tell him truthfully and kindly that the decision is hers and that what she needs from him is support, not pressure.\nDo not help him plan how to change her mind.\nBring in the director, and use flag 4 if threats or control are involved.',
+  child:'Bring in the director, who decides how the report is made.\nKansas Protection Report Center: 1.800.922.5330, 24 hours.\nCall 911 for immediate danger.',
+  traffic:'! Do not confront. Finish calmly. Tell the director privately.\nSigns to watch for:\n* Someone else holds her phone, ID or money.\n* He answers for her or won’t let her be seen alone.\n* Scripted or shifting stories.\n* A large age gap that doesn’t fit.\n* Debts that can never be paid off.\n* Work he cannot leave.\nA minor in commercial sex is always a victim. The director should arrange for the advocate meeting with her to see her alone.\nNumbers:\n* 911 for immediate danger.\n* National Human Trafficking Hotline: 1.888.373.7888, text 233733, or live chat. It is not law enforcement.\n* Kansas Protection Report Center, 1.800.922.5330, if a minor may be involved.'
+};
+var TPL={
+  heart:{well:'You made room for his own story and how he is really doing.',grow:'Ask about his own heart and his story before moving to plans.'},
+  her:{well:'You helped him think about her, the baby and what she needs from him.',grow:'Ask how things are between him and her, and what she needs from him right now.'},
+  support:{well:'You explored who is in his corner and the practical side of providing.',grow:'Ask who is in his corner and what worries him about providing.'},
+  faith:{well:'You offered the spiritual side of support with care.',grow:'Use the bridge line to offer the spiritual side of support, gently and without pressure.'},
+  talk:{well:'You let him do most of the talking.',grow:'Talk less and leave more silence so he can fill it.',unset:'Estimate your talk share after each session so you can watch it improve.'},
+  openq:{well:'Your questions opened the door for him to talk.',grow:'Trade yes or no questions for ones that start with what, how or tell me.'},
+  lead:{well:'You followed where he wanted to go.',grow:'When he raises something, stay with it before moving to your next point.'},
+  next:{well:'You closed with clear next steps on both sides.',grow:'Close with one thing he will do, one thing you will do and a date to meet again.'},
+  hope:{well:'You ended the conversation on hope.',grow:'Leave him with one honest reason for hope before he goes.'}
+};
+
+/* Small helpers */
+function $(id){return document.getElementById(id);}
+function h(tag,attrs){
+  var e=document.createElement(tag),k,v,i,c;
+  if(attrs){for(k in attrs){v=attrs[k];if(v==null||v===false)continue;
+    if(k==='class')e.className=v;else if(k==='text')e.textContent=v;
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);}}
+  for(i=2;i<arguments.length;i++){c=arguments[i];if(c==null||c===false)continue;
+    if(Array.isArray(c)){c.forEach(function(x){if(x!=null&&x!==false)e.append(x.nodeType?x:document.createTextNode(String(x)));});}
+    else e.append(c.nodeType?c:document.createTextNode(String(c)));}
+  return e;
+}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function uid(){if(crypto.randomUUID)return crypto.randomUUID();var b=crypto.getRandomValues(new Uint8Array(16));return Array.from(b,function(x){return x.toString(16).padStart(2,'0');}).join('');}
+function pad(n){return String(n).padStart(2,'0');}
+function localISO(d){return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate());}
+function isoKey(d){return d.getFullYear()+''+pad(d.getMonth()+1)+pad(d.getDate());}
+function parseDay(s){if(!s)return null;var p=s.split(/[.-]/);return new Date(+p[0],+p[1]-1,+p[2],12);}
+function fmtDay(s){var d=parseDay(s);return d?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';}
+function fmtShort(s){var d=parseDay(s);return d?d.toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';}
+function r1(n){var x=Math.round(n*10)/10;return String(x);}
+function lsGet(k){try{return localStorage.getItem(LSP+k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(LSP+k,v);}catch(e){}}
+function lsClear(){try{Object.keys(localStorage).forEach(function(k){if(k.indexOf(LSP)===0)localStorage.removeItem(k);});}catch(e){}}
+function download(name,blob){var u=URL.createObjectURL(blob);var a=h('a',{href:u,download:name});document.body.append(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},4000);}
+function b64(u8){var s='',i;for(i=0;i<u8.length;i+=32768)s+=String.fromCharCode.apply(null,u8.subarray(i,i+32768));return btoa(s);}
+function unb64(s){var b=atob(s),u=new Uint8Array(b.length),i;for(i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+
+/* IndexedDB */
+var db=null;
+function openDB(){return new Promise(function(res,rej){var r=indexedDB.open(DBN,1);
+  r.onupgradeneeded=function(){var d=r.result;
+    if(!d.objectStoreNames.contains('meta'))d.createObjectStore('meta',{keyPath:'k'});
+    if(!d.objectStoreNames.contains('sessions'))d.createObjectStore('sessions',{keyPath:'id'});
+    if(!d.objectStoreNames.contains('scores'))d.createObjectStore('scores',{keyPath:'id'});};
+  r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
+function tx(stores,mode,fn){return new Promise(function(res,rej){var t=db.transaction(stores,mode),out;
+  var r=fn(t);if(r&&typeof r==='object'&&'onsuccess' in r)r.onsuccess=function(){out=r.result;};
+  t.oncomplete=function(){res(out);};t.onerror=function(){rej(t.error);};t.onabort=function(){rej(t.error);};});}
+function getMeta(k){return tx('meta','readonly',function(t){return t.objectStore('meta').get(k);}).then(function(r){return r?r.v:undefined;});}
+function getAll(s){return tx(s,'readonly',function(t){return t.objectStore(s).getAll();});}
+function getOne(s,id){return tx(s,'readonly',function(t){return t.objectStore(s).get(id);});}
+function putMany(list){
+  var stores=[];list.forEach(function(x){if(stores.indexOf(x[0])<0)stores.push(x[0]);});
+  return tx(stores,'readwrite',function(t){list.forEach(function(x){t.objectStore(x[0]).put(x[1]);});});
+}
+
+/* Crypto */
+var te=new TextEncoder(),td=new TextDecoder();
+var KEY=null,S=null;
+function deriveKey(pass,salt,iter){
+  return crypto.subtle.importKey('raw',te.encode(pass),'PBKDF2',false,['deriveKey']).then(function(base){
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);});
+}
+function encWith(k,obj){var iv=crypto.getRandomValues(new Uint8Array(12));
+  return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,te.encode(JSON.stringify(obj))).then(function(ct){return {iv:iv,ct:new Uint8Array(ct)};});}
+function decWith(k,rec){return crypto.subtle.decrypt({name:'AES-GCM',iv:rec.iv},k,rec.ct).then(function(pt){return JSON.parse(td.decode(pt));});}
+function enc(obj){return encWith(KEY,obj);}
+function dec(rec){return decWith(KEY,rec);}
+
+/* Settings */
+function defaultSettings(){return {consent:DEFAULT_CONSENT,mode:'ask',pool:clone(DEFAULT_POOL),kw:clone(DEFAULT_KW),starters:DEFAULT_STARTERS,
+  weights:clone(DEFAULT_WEIGHTS),flags:clone(DEFAULT_FLAGS),idle:5,retention:30,usedQ:{heart:[],her:[],support:[],faith:[]}};}
+function mergeSettings(s){var d=defaultSettings();if(!s||typeof s!=='object')return d;
+  Object.keys(d).forEach(function(k){if(s[k]===undefined)s[k]=d[k];});
+  ['pool','kw','flags','usedQ'].forEach(function(g){Object.keys(d[g]).forEach(function(k){if(s[g][k]===undefined)s[g][k]=d[g][k];});});
+  return s;}
+function saveSettings(){return enc(S).then(function(r){return putMany([['meta',{k:'settings',v:r}],['meta',{k:'purgeDays',v:S.retention}]]);});}
+
+/* Rubric engine: pure */
+function normWeights(w){var out={cov:{},lis:{}};
+  ['cov','lis'].forEach(function(g){var keys=Object.keys(DEFAULT_WEIGHTS[g]),sum=0;
+    keys.forEach(function(k){var v=Math.max(0,Number(w&&w[g]&&w[g][k])||0);out[g][k]=v;sum+=v;});
+    if(sum<=0){out[g]=clone(DEFAULT_WEIGHTS[g]);}else{keys.forEach(function(k){out[g][k]=out[g][k]*50/sum;});}});
+  return out;}
+function talkFrac(s){if(s==null||s==='')return 0;s=Number(s);if(s<=35)return 1;if(s>=75)return 0;return (75-s)/40;}
+function score(s,weights){
+  var w=normWeights(weights),items=[],cov=0,lis=0;
+  AREAS.forEach(function(a){var p=w.cov[a.id],e=s.areas&&s.areas[a.id]?p:0;cov+=e;items.push({id:a.id,half:'cov',label:a.name,possible:p,earned:e});});
+  var lead={yes:1,partly:0.5,no:0}[s.lead]||0;
+  var next=((s.his&&s.his.trim())?4:0)+((s.mine&&s.mine.trim())?3:0)+(s.nextDate?3:0);
+  var fr={talk:talkFrac(s.talk),openq:Math.min(4,Math.max(0,Number(s.openq)||0))/4,lead:lead,next:next/10,hope:s.hope?1:0};
+  LIS_ITEMS.forEach(function(x){var p=w.lis[x[0]],e=p*fr[x[0]];lis+=e;items.push({id:x[0],half:'lis',label:x[1],possible:p,earned:e});});
+  return {total:Math.round(cov+lis),coverage:cov,listening:lis,items:items};
+}
+function ratio(it){return it.possible>0?Math.round(it.earned/it.possible*1000)/1000:null;}
+function feedback(sc,s){
+  var lisFirst=sc.items.filter(function(i){return i.half==='lis';}).concat(sc.items.filter(function(i){return i.half==='cov';}));
+  var best=null,worst=null;
+  lisFirst.forEach(function(it){var r=ratio(it);if(r==null)return;if(best==null||r>ratio(best))best=it;});
+  lisFirst.forEach(function(it){var r=ratio(it);if(r==null)return;if(worst==null||r<ratio(worst)||(r===ratio(worst)&&it.possible>worst.possible))worst=it;});
+  var well=best&&ratio(best)>0?TPL[best.id].well:'You showed up and sat with him. That matters.';
+  var grow;
+  if(!worst||ratio(worst)>=1)grow='Nothing was missed this time. Keep listening this well.';
+  else if(worst.id==='talk'&&(s.talk==null))grow=TPL.talk.unset;
+  else grow=TPL[worst.id].grow;
+  return {well:well,grow:grow,question:s.suggest?s.suggest.text:''};
+}
+function pickQuestion(s){
+  var area=null;AREAS.forEach(function(a){if(!area&&!(s.areas&&s.areas[a.id]))area=a.id;});
+  if(!area)area='faith';
+  if(s.suggest&&s.suggest.area===area)return s.suggest;
+  var pool=(S.pool[area]||[]).filter(function(q){return q.trim();});
+  if(!pool.length)return {area:area,text:''};
+  var used=S.usedQ[area]||[];var idx=-1,i;
+  for(i=0;i<pool.length;i++){if(used.indexOf(pool[i])<0){idx=i;break;}}
+  if(idx<0){used=[];idx=0;}
+  used.push(pool[idx]);S.usedQ[area]=used;
+  return {area:area,text:pool[idx]};
+}
+
+/* Navigation */
+var current='lock',sessionView='form',resultsFrom='session';
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id==='scr-'+id);});
+  current=id;
+  document.body.classList.toggle('full',id==='lock'||id==='consent');
+  var tab=(id==='results'||id==='consent')?'session':id;
+  if(id==='results'&&resultsFrom==='history')tab='history';
+  document.querySelectorAll('#tabs button').forEach(function(b){if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  $('main').scrollTop=0;
+  if(id!=='print')clearPreview();
+}
+function goTab(t){
+  if(!KEY)return;
+  if(t==='session'){
+    if(sessionView==='results'&&resultsFrom==='session'){show('results');return;}
+    openSessionForm();return;}
+  if(t==='history'){renderHistory();show('history');return;}
+  if(t==='print'){show('print');renderPreview();return;}
+  if(t==='settings'){renderSettings();show('settings');}
+}
+document.querySelectorAll('#tabs button').forEach(function(b){b.addEventListener('click',function(){goTab(b.dataset.tab);});});
+
+/* Sheets */
+function closeSheet(){var o=$('ov');if(o)o.remove();}
+function sheet(opts){
+  closeSheet();
+  var acts=h('div',{class:'sh-acts'});
+  (opts.actions||[]).forEach(function(a){acts.append(h('button',{class:'btn '+(a.cls||''),onclick:function(){a.fn();}},a.label));});
+  var sh=h('div',{class:'sheet'+(opts.coral?' coral':''),role:'dialog','aria-modal':'true','aria-label':opts.title},
+    h('div',{class:'sh-head',text:opts.title}),h('div',{class:'sh-body'},opts.body||[]),acts);
+  var ov=h('div',{id:'ov',onclick:function(e){if(e.target===ov&&!opts.sticky)closeSheet();}},sh);
+  document.body.append(ov);
+  return sh;
+}
+function infoSheet(title,text){sheet({title:title,body:[h('p',{text:text})],actions:[{label:'Close',cls:'primary',fn:closeSheet}]});}
+
+/* Lock screen */
+var fails=Number(lsGet('fails')||0);
+function lockMsg(t){$('l-msg2').textContent=t;}
+function waitLeft(){var u=Number(lsGet('until')||0);return Math.max(0,u-Date.now());}
+var waitTimer=null;
+function tickWait(){clearInterval(waitTimer);
+  var go=function(){var w=waitLeft();if(w<=0){clearInterval(waitTimer);$('l-go').disabled=false;lockMsg('You can try again now.');return;}
+    $('l-go').disabled=true;lockMsg('Too many tries. Wait '+Math.ceil(w/1000)+' seconds.');};
+  go();waitTimer=setInterval(go,500);}
+function showLock(){
+  getMeta('check').then(function(c){
+    var first=!c;
+    $('lock-setup').classList.toggle('hidden',!first);$('lock-unlock').classList.toggle('hidden',first);
+    show('lock');
+    $('l-pass').value='';$('l-new1').value='';$('l-new2').value='';
+    if(!first){if(waitLeft()>0)tickWait();else lockMsg('');setTimeout(function(){$('l-pass').focus();},50);}
+  });
+}
+function requestPersist(){try{if(navigator.storage&&navigator.storage.persist)return navigator.storage.persist();}catch(e){}return Promise.resolve(false);}
+$('l-create').addEventListener('click',function(){
+  var a=$('l-new1').value,b=$('l-new2').value,m=$('l-msg1');
+  if(a.length<8){m.textContent='Use at least 8 characters.';return;}
+  if(a!==b){m.textContent='The two passphrases do not match.';return;}
+  m.textContent='Setting up encryption.';$('l-create').disabled=true;
+  var salt=crypto.getRandomValues(new Uint8Array(16));
+  deriveKey(a,salt,ITER).then(function(k){KEY=k;S=defaultSettings();
+    return Promise.all([encWith(k,CHECK),encWith(k,S)]);
+  }).then(function(r){
+    return putMany([['meta',{k:'salt',v:salt}],['meta',{k:'iter',v:ITER}],['meta',{k:'check',v:r[0]}],['meta',{k:'settings',v:r[1]}],['meta',{k:'purgeDays',v:30}]]);
+  }).then(function(){$('l-create').disabled=false;m.textContent='';requestPersist();enterApp();
+  }).catch(function(e){$('l-create').disabled=false;m.textContent='Setup failed: '+(e&&e.message||e);});
+});
+function tryUnlock(){
+  if(waitLeft()>0)return;
+  var p=$('l-pass').value;if(!p){lockMsg('Enter your passphrase.');return;}
+  $('l-go').disabled=true;lockMsg('Unlocking.');
+  Promise.all([getMeta('salt'),getMeta('iter'),getMeta('check'),getMeta('settings')]).then(function(m){
+    return deriveKey(p,m[0],m[1]).then(function(k){
+      return decWith(k,m[2]).then(function(v){if(v!==CHECK)throw new Error('bad');return k;},function(){throw new Error('bad');})
+        .then(function(k2){return decWith(k2,m[3]).then(function(st){KEY=k2;S=mergeSettings(st);});});
+    });
+  }).then(function(){fails=0;lsSet('fails','0');$('l-go').disabled=false;lockMsg('');$('l-pass').value='';enterApp();
+  }).catch(function(){
+    $('l-go').disabled=false;$('l-pass').value='';fails++;
+    if(fails>=5){fails=0;lsSet('fails','0');lsSet('until',String(Date.now()+30000));tickWait();}
+    else{lsSet('fails',String(fails));lockMsg('That passphrase did not work. '+(5-fails)+' tries left before a short wait.');}
+  });
+}
+$('l-go').addEventListener('click',tryUnlock);
+$('l-pass').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
+$('l-new2').addEventListener('keydown',function(e){if(e.key==='Enter')$('l-create').click();});
+$('l-wipe').addEventListener('click',wipeSheet);
+$('l-restore').addEventListener('click',function(){pickBackup(true);});
+
+function lock(){
+  KEY=null;S=null;closeSheet();clearTimeout(idleT);
+  resetForm();sessionView='form';
+  $('h-list').textContent='';$('h-chart').textContent='';$('s-body').textContent='';
+  $('r-items').textContent='';['fb-well','fb-grow','fb-q','r-meta'].forEach(function(i){$(i).textContent='';});
+  clearPreview();$('printArea').textContent='';lastPrint=null;
+  showLock();
+}
+
+/* Idle and hidden lock */
+var idleT=null,lastAct=Date.now(),hiddenAt=0,hideT=null;
+function bump(){lastAct=Date.now();if(!KEY)return;clearTimeout(idleT);idleT=setTimeout(lock,(Number(S&&S.idle)||5)*60000);}
+['pointerdown','keydown','input','wheel','touchstart'].forEach(function(ev){document.addEventListener(ev,bump,{capture:true,passive:true});});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){hiddenAt=Date.now();clearTimeout(hideT);hideT=setTimeout(function(){if(document.hidden&&KEY)lock();},60000);}
+  else{clearTimeout(hideT);
+    if(KEY&&hiddenAt&&Date.now()-hiddenAt>=60000){lock();}
+    else if(KEY&&Date.now()-lastAct>=(Number(S.idle)||5)*60000){lock();}
+    hiddenAt=0;}
+});
+
+function enterApp(){bump();resetForm();sessionView='form';openSessionForm();}
+
+/* Consent */
+function openConsent(){$('c-script').textContent=S.consent||DEFAULT_CONSENT;show('consent');}
+$('c-yes').addEventListener('click',function(){F.consent={mode:'yes',at:new Date().toISOString()};show('session');});
+$('c-notes').addEventListener('click',function(){F.consent={mode:'notes',at:null};show('session');});
+$('c-later').addEventListener('click',function(){goTab('history');});
+
+/* Session form */
+var F=null,editing=null;
+function blankForm(){var a={},m={},r={};AREAS.forEach(function(x){a[x.id]=false;});MATERIALS.forEach(function(x){m[x[0]]=false;});REFERRALS.forEach(function(x){r[x[0]]=false;});
+  return {initials:'',areas:a,talk:null,openq:null,lead:null,hope:false,his:'',mine:'',nextDate:'',mat:m,ref:r,spiritual:null,gospel:null,flags:[],keep:false,consent:null,suggest:null};}
+function openSessionForm(){
+  sessionView='form';
+  if(!editing&&!F.consent&&S.mode==='ask'){openConsent();return;}
+  if(!editing&&!F.consent)F.consent={mode:'notes',at:null};
+  renderForm();show('session');
+}
+function resetForm(){F=blankForm();editing=null;if(S)renderForm();}
+function setPressed(b,on){b.setAttribute('aria-pressed',on?'true':'false');}
+function setSwitch(b,on){b.setAttribute('aria-checked',on?'true':'false');}
+function checkBtn(label,get,set){
+  var bx=h('span',{class:'bx'});bx.innerHTML=CHECK_SVG;
+  var b=h('button',{class:'ck',type:'button','aria-pressed':'false'},bx,h('span',{text:label}));
+  b.addEventListener('click',function(){set(!get());setPressed(b,get());});
+  b._sync=function(){setPressed(b,get());};return b;}
+function segBtns(box,opts,get,set){
+  box.textContent='';var btns=opts.map(function(o){var b=h('button',{type:'button','aria-pressed':'false'},o[1]);
+    b.addEventListener('click',function(){set(get()===o[0]?null:o[0]);sync();});box.append(b);return [o[0],b];});
+  function sync(){btns.forEach(function(x){setPressed(x[1],get()===x[0]);});}
+  box._sync=sync;}
+var formSyncs=[];
+function buildForm(){
+  formSyncs=[];
+  var areas=$('f-areas');AREAS.forEach(function(a){var b=checkBtn(a.name,function(){return F.areas[a.id];},function(v){F.areas[a.id]=v;});areas.append(b);formSyncs.push(b._sync);});
+  var mat=$('f-mat');MATERIALS.forEach(function(x){var b=checkBtn(x[1],function(){return F.mat[x[0]];},function(v){F.mat[x[0]]=v;});mat.append(b);formSyncs.push(b._sync);});
+  var ref=$('f-ref');REFERRALS.forEach(function(x){var b=checkBtn(x[1],function(){return F.ref[x[0]];},function(v){F.ref[x[0]]=v;});ref.append(b);formSyncs.push(b._sync);});
+  segBtns($('f-openq'),[[0,'0'],[1,'1'],[2,'2'],[3,'3'],[4,'4']],function(){return F.openq;},function(v){F.openq=v;});
+  segBtns($('f-lead'),[['yes','Yes'],['partly','Partly'],['no','No']],function(){return F.lead;},function(v){F.lead=v;});
+  segBtns($('f-spirit'),[[true,'Yes'],[false,'No']],function(){return F.spiritual;},function(v){F.spiritual=v;});
+  segBtns($('f-gospel'),[[true,'Yes'],[false,'No']],function(){return F.gospel;},function(v){F.gospel=v;});
+  ['f-openq','f-lead','f-spirit','f-gospel'].forEach(function(i){formSyncs.push($(i)._sync);});
+  var chips=$('f-flags');
+  FLAGS.forEach(function(fl){var b=h('button',{class:'chip',type:'button','aria-pressed':'false'},fl.chip);
+    b.addEventListener('click',function(){if(F.flags.indexOf(fl.id)<0)F.flags.push(fl.id);setPressed(b,true);openFlag(fl);});
+    chips.append(b);formSyncs.push(function(){setPressed(b,F.flags.indexOf(fl.id)>=0);});});
+}
+function renderForm(){
+  $('f-init').value=F.initials;initWarn();
+  formSyncs.forEach(function(f){f();});
+  syncTalk();
+  setSwitch($('f-hope'),F.hope);setSwitch($('f-keep'),F.keep);
+  $('f-his').value=F.his;$('f-mine').value=F.mine;$('f-next').value=F.nextDate;counts();
+  $('f-keep-note').textContent='Kept sessions are not purged after '+((S&&S.retention)||30)+' days. Scores always stay in your trend.';
+  $('f-editing').classList.toggle('hidden',!editing);$('f-cancel').classList.toggle('hidden',!editing);
+  $('f-save').textContent=editing?'Save changes':'Save and score';
+}
+function initWarn(){var v=$('f-init').value.trim();$('f-init-warn').classList.toggle('hidden',!(/[a-z]{4,}/i.test(v)||/[a-z]{2,}\s+[a-z]{2,}/i.test(v)));}
+$('f-init').addEventListener('input',function(){F.initials=this.value;initWarn();});
+function syncTalk(){var w=$('f-talkwrap');if(F.talk==null){w.classList.add('unset');$('f-talk').value=50;$('f-talk-out').textContent='Not set';}
+  else{w.classList.remove('unset');$('f-talk').value=F.talk;$('f-talk-out').textContent=F.talk+' percent';}}
+$('f-talk').addEventListener('input',function(){F.talk=Number(this.value);syncTalk();});
+$('f-talk-clear').addEventListener('click',function(){F.talk=null;syncTalk();});
+$('f-hope').addEventListener('click',function(){F.hope=!F.hope;setSwitch(this,F.hope);});
+$('f-keep').addEventListener('click',function(){F.keep=!F.keep;setSwitch(this,F.keep);});
+function counts(){$('c-his').textContent=$('f-his').value.length+' of 140';$('c-mine').textContent=$('f-mine').value.length+' of 140';}
+$('f-his').addEventListener('input',function(){F.his=this.value;counts();});
+$('f-mine').addEventListener('input',function(){F.mine=this.value;counts();});
+$('f-next').addEventListener('input',function(){F.nextDate=this.value;});
+$('f-next').addEventListener('change',function(){F.nextDate=this.value;});
+$('f-cancel').addEventListener('click',function(){var id=editing.id;resetForm();openResults(id,resultsFrom);});
+
+/* Flag sheet */
+var LINK_RE=/\b(\d{3}) \(call or text\)|text ([A-Z]{2,}) to (\d{5,6})|text (\d{5,6})|((?:1\.)?\d{3}\.\d{3}\.\d{4})|\b(911)\b/g;
+function linkify(parent,text){
+  var last=0,m;LINK_RE.lastIndex=0;
+  while((m=LINK_RE.exec(text))){
+    if(m.index>last)parent.append(text.slice(last,m.index));
+    if(m[1]){parent.append(h('a',{href:'tel:'+m[1],text:m[1]}),' (call or ',h('a',{href:'sms:'+m[1],text:'text'}),')');}
+    else if(m[2]){parent.append(h('a',{href:'sms:'+m[3]+'?&body='+encodeURIComponent(m[2]),text:m[0]}));}
+    else if(m[4]){parent.append(h('a',{href:'sms:'+m[4],text:m[0]}));}
+    else if(m[5]){parent.append(h('a',{href:'tel:'+m[5].replace(/\D/g,''),text:m[5]}));}
+    else if(m[6]){parent.append(h('a',{href:'tel:911',text:'911'}));}
+    last=LINK_RE.lastIndex;}
+  if(last<text.length)parent.append(text.slice(last));
+  return parent;
+}
+function renderSteps(text){
+  var box=h('div',{class:'steps'}),ul=null;
+  String(text||'').split('\n').forEach(function(line){
+    var t=line.trim();if(!t){ul=null;return;}
+    if(t.slice(0,2)==='! '){ul=null;box.append(linkify(h('p',{class:'alert'}),t.slice(2)));return;}
+    if(t.slice(0,2)==='* '){if(!ul){ul=h('ul');box.append(ul);}ul.append(linkify(h('li'),t.slice(2)));return;}
+    ul=null;
+    if(/:$/.test(t)&&t.length<40){box.append(h('h4',{text:t.slice(0,-1)}));return;}
+    box.append(linkify(h('p'),t));});
+  return box;
+}
+function openFlag(fl){
+  sheet({title:fl.title,coral:true,body:[
+    h('div',{class:'banner'},'Always truthful. Her decision. Help him support her.'),
+    h('p',{class:'opener',text:FLAG_OPENER}),
+    renderSteps((S.flags&&S.flags[fl.id])||DEFAULT_FLAGS[fl.id]),
+    h('p',{class:'foot',text:FLAG_FOOT})],
+    actions:[{label:'Close',cls:'primary',fn:closeSheet},{label:'Remove this flag from the session',cls:'',fn:function(){F.flags=F.flags.filter(function(x){return x!==fl.id;});formSyncs.forEach(function(f){f();});closeSheet();}}]});
+}
+
+/* Save */
+function collect(){var d=clone(F);delete d.keep;d.his=d.his.trim();d.mine=d.mine.trim();d.initials=d.initials.trim();return d;}
+$('f-save').addEventListener('click',function(){
+  var btn=this;btn.disabled=true;
+  var d=collect(),id=editing?editing.id:uid(),createdAt=editing?editing.createdAt:Date.now();
+  d.date=editing?editing.date:localISO(new Date(createdAt));
+  d.w=normWeights(S.weights);
+  d.suggest=pickQuestion(d);
+  var sc=score(d,d.w),keep=F.keep;
+  Promise.all([enc(d),enc({date:d.date,ts:createdAt,total:sc.total,coverage:sc.coverage,listening:sc.listening}),enc(S)]).then(function(r){
+    return putMany([['sessions',{id:id,createdAt:createdAt,keep:keep,iv:r[0].iv,ct:r[0].ct}],['scores',{id:id,iv:r[1].iv,ct:r[1].ct}],['meta',{k:'settings',v:r[2]}]]);
+  }).then(function(){btn.disabled=false;var from=editing?resultsFrom:'session';resetForm();openResults(id,from);
+  }).catch(function(e){btn.disabled=false;infoSheet('Not saved','Something went wrong while saving: '+(e&&e.message||e));});
+});
+
+/* Results */
+var shownId=null;
+function openResults(id,from){
+  resultsFrom=from||'session';
+  getOne('sessions',id).then(function(rec){if(!rec)throw new Error('That session is no longer stored.');
+    return dec(rec).then(function(d){renderResults(id,d,rec);});
+  }).catch(function(e){infoSheet('Not available',e.message||String(e));});
+}
+function renderResults(id,d,rec){
+  shownId=id;if(resultsFrom==='session')sessionView='results';
+  var sc=score(d,d.w||S.weights),fb=feedback(sc,d);
+  $('r-meta').textContent=fmtDay(d.date)+(d.initials?'  ·  '+d.initials:'');
+  $('r-total').textContent=sc.total;$('r-cov').textContent=r1(sc.coverage);$('r-lis').textContent=r1(sc.listening);
+  var c=2*Math.PI*52;$('r-arc').setAttribute('stroke-dasharray',(c*sc.total/100)+' '+c);
+  $('fb-well').textContent=fb.well;$('fb-grow').textContent=fb.grow;$('fb-q').textContent=fb.question||'Pick any question from your pool.';
+  var box=$('r-items');box.textContent='';
+  [['cov','Coverage'],['lis','Listening']].forEach(function(g){
+    box.append(h('h3',{class:g[0]==='lis'?'sp':'',text:g[1]}));
+    sc.items.filter(function(i){return i.half===g[0];}).forEach(function(it){
+      var pct=it.possible>0?Math.round(it.earned/it.possible*100):0;
+      var bar=h('div',{class:'bar'},h('i',{style:'width:'+pct+'%'}));
+      box.append(h('div',{class:'item'},h('div',{class:'top'},h('span',{text:it.label}),h('span',{text:r1(it.earned)+' of '+r1(it.possible)})),bar));});});
+  show('results');
+}
+$('r-done').addEventListener('click',function(){sessionView='form';if(resultsFrom==='history'){goTab('history');}else{resetForm();openSessionForm();}});
+$('r-edit').addEventListener('click',function(){
+  var id=shownId,from=resultsFrom;
+  getOne('sessions',id).then(function(rec){return dec(rec).then(function(d){
+    F=blankForm();Object.keys(F).forEach(function(k){if(d[k]!==undefined)F[k]=d[k];});
+    F.keep=!!rec.keep;editing={id:id,createdAt:rec.createdAt,date:d.date};resultsFrom=from;sessionView='form';renderForm();show('session');});});
+});
+$('r-print').addEventListener('click',function(){
+  getOne('sessions',shownId).then(function(rec){return dec(rec);}).then(function(d){printSheet(d);});
+});
+
+/* History */
+function loadAll(){
+  return Promise.all([getAll('sessions'),getAll('scores')]).then(function(r){
+    return Promise.all([Promise.all(r[0].map(function(rec){return dec(rec).then(function(d){return {rec:rec,d:d};});})),
+      Promise.all(r[1].map(function(rec){return dec(rec).then(function(s){s.id=rec.id;return s;});}))]);
+  });
+}
+function renderHistory(){
+  var list=$('h-list'),chart=$('h-chart');list.textContent='';chart.textContent='';
+  loadAll().then(function(r){
+    var sessions=r[0].sort(function(a,b){return b.rec.createdAt-a.rec.createdAt;}),scores=r[1];
+    var byId={};scores.forEach(function(s){byId[s.id]=s;});
+    drawChart(chart,scores.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:(a.ts||0)-(b.ts||0);}));
+    if(!sessions.length){list.append(h('p',{class:'empty',text:'No saved sessions yet. Saved scores stay in the trend even after their notes are purged.'}));return;}
+    var ret=Number(S.retention)||30;
+    sessions.forEach(function(x){
+      var sc=byId[x.rec.id],age=Math.floor((Date.now()-x.rec.createdAt)/DAY);
+      var left=h('div',{class:'left'});
+      function setLeft(){left.textContent=x.rec.keep?'Kept until you turn this off':Math.max(0,ret-age)+' days left before purge';}
+      setLeft();
+      var sw=h('button',{class:'switch',role:'switch','aria-checked':x.rec.keep?'true':'false','aria-label':'Keep longer'});
+      sw.addEventListener('click',function(e){e.stopPropagation();x.rec.keep=!x.rec.keep;setSwitch(sw,x.rec.keep);setLeft();
+        getOne('sessions',x.rec.id).then(function(cur){cur.keep=x.rec.keep;return putMany([['sessions',cur]]);});});
+      var card=h('div',{class:'card hcard',role:'button',tabindex:'0'},
+        h('div',{class:'info'},h('div',{class:'d',text:fmtDay(x.d.date)}),h('div',{class:'i',text:x.d.initials||'No initials'}),left),
+        h('div',{class:'center'},sw,h('div',{class:'left',text:'Keep'})),
+        h('div',{class:'sc',text:sc?String(sc.total):''}));
+      card.addEventListener('click',function(){openResults(x.rec.id,'history');});
+      card.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target===card)openResults(x.rec.id,'history');});
+      list.append(card);});
+  });
+}
+function svg(tag,attrs){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+function drawChart(box,pts){
+  if(pts.length<1){box.append(h('p',{class:'empty',text:'Your trend appears after your first saved session.'}));return;}
+  var W=340,H=190,L=30,R=12,T=12,B=28,iw=W-L-R,ih=H-T-B;
+  var s=svg('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Score trend by date'});
+  [0,50,100].forEach(function(v){var y=T+ih*(1-v/100);
+    s.append(svg('line',{x1:L,x2:W-R,y1:y,y2:y,stroke:'rgba(227,255,255,.18)','stroke-width':1}));
+    var t=svg('text',{x:L-6,y:y+4,'text-anchor':'end',fill:'#E3FFFF','font-size':10});t.textContent=v;s.append(t);});
+  function X(i){return pts.length===1?L+iw/2:L+iw*i/(pts.length-1);}
+  function Y(v){return T+ih*(1-Math.max(0,Math.min(100,v))/100);}
+  function path(key,color,width,op){var dd=pts.map(function(p,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(p[key]).toFixed(1);}).join(' ');
+    s.append(svg('path',{d:dd,fill:'none',stroke:color,'stroke-width':width,'stroke-opacity':op,'stroke-linejoin':'round','stroke-linecap':'round'}));}
+  path('coverage','#4DA8A9',1.6,0.6);path('listening','#FD93A4',1.6,0.6);path('total','#FFFFFF',2.6,1);
+  pts.forEach(function(p,i){s.append(svg('circle',{cx:X(i),cy:Y(p.total),r:3.2,fill:'#FFFFFF'}));});
+  var a=svg('text',{x:X(0),y:H-8,'text-anchor':pts.length===1?'middle':'start',fill:'#E3FFFF','font-size':10});a.textContent=fmtShort(pts[0].date);s.append(a);
+  if(pts.length>1){var z=svg('text',{x:X(pts.length-1),y:H-8,'text-anchor':'end',fill:'#E3FFFF','font-size':10});z.textContent=fmtShort(pts[pts.length-1].date);s.append(z);}
+  box.append(s);
+}
+
+/* Printed forms */
+var PF_CSS=[
+'.pf{color:#000;background:#fff;font-family:Georgia,"Times New Roman",Times,serif;font-size:9.6pt;line-height:1.28;-webkit-print-color-adjust:exact;print-color-adjust:exact}',
+'.pf *{box-sizing:border-box}',
+'.pf-page{break-after:page;page-break-after:always}',
+'.pf-page:last-child{break-after:auto;page-break-after:auto}',
+'.pf-title{font-size:14pt;font-weight:bold;margin:0 0 3pt}',
+'.pf-rule{border:0;border-top:1.5pt solid #4DA8A9;margin:0 0 6pt;height:0}',
+'.pf-cols{column-count:2;column-gap:0.32in}',
+'.pf-h{font-size:11pt;font-weight:bold;margin:7pt 0 2pt;break-after:avoid;page-break-after:avoid}',
+'.pf-mv{break-inside:auto}',
+'.pf-keep{break-inside:avoid;page-break-inside:avoid}',
+'.pf-mv > .pf-rule{margin-bottom:3pt}',
+'.pf-say{font-style:italic;margin:2pt 0 3pt}',
+'.pf-q{margin:0 0 4pt;break-inside:avoid;page-break-inside:avoid}',
+'.pf-qt{margin:0}',
+'.pf-line{border-bottom:0.7pt solid #000;min-height:17pt;padding:3pt 0 1pt;font-style:italic}',
+'.pf-notes{margin-top:8pt}',
+'.pf-notes .pf-line{min-height:19pt}',
+'.bx{display:inline-block;width:9pt;height:9pt;border:0.8pt solid #000;vertical-align:-1pt;text-align:center;line-height:8pt;font-size:8pt;font-family:Arial,Helvetica,sans-serif;margin-right:3pt;font-style:normal}',
+'.pf-h .bx{width:10pt;height:10pt;line-height:9pt;margin-right:5pt}',
+'.pf-sec{font-size:11pt;font-weight:bold;margin:10pt 0 2pt}',
+'.pf-row{margin:0 0 7pt;line-height:1.9}',
+'.pf-lbl{font-weight:bold;margin-right:4pt}',
+'.pf-blank{display:inline-block;border-bottom:0.7pt solid #000;min-width:1.3in;height:12pt;vertical-align:bottom;margin:0 10pt 0 2pt}',
+'.pf-blank.s{min-width:0.55in}',
+'.pf-blank.l{min-width:3.2in}',
+'.pf-opt{display:inline-block;white-space:nowrap;margin-right:11pt}',
+'.pf-sub{font-style:italic;margin-right:6pt}'
+].join('\n');
+document.head.append(h('style',{id:'pfcss',text:PF_CSS}));
+function bx(on){return h('span',{class:'bx',text:on?'✓':''});}
+function pfLine(fill){return h('div',{class:'pf-line',text:fill||''});}
+function pfQ(text,fill){return h('div',{class:'pf-q'},h('p',{class:'pf-qt',text:text}),pfLine(fill));}
+function pfHead(name,box,on){return [h('div',{class:'pf-h'},box?bx(on):null,name),h('hr',{class:'pf-rule'})];}
+function pfStart(name,box,on,first){return h('div',{class:'pf-keep'},pfHead(name,box,on),first);}
+function opt(label,on){return h('span',{class:'pf-opt'},bx(on),label);}
+function blank(cls){return h('span',{class:'pf-blank'+(cls?' '+cls:'')});}
+function buildPrint(d){
+  var pool=S.pool,root=h('div',{class:'pf'});
+  var p1=h('div',{class:'pf-page'}),cols=h('div',{class:'pf-cols'});
+  p1.append(h('div',{class:'pf-title',text:'Male Talking Points, Proposed Revision, for center review.'}),h('hr',{class:'pf-rule'}),cols);
+  var mv=h('div',{class:'pf-mv'},pfStart('Welcome',false,false,[h('p',{class:'pf-say',text:WELCOME_LINE}),pfQ(WELCOME_QS[0])]));
+  WELCOME_QS.slice(1).forEach(function(q){mv.append(pfQ(q));});cols.append(mv);
+  AREAS.forEach(function(a){
+    var qs=(pool[a.id]||[]).filter(function(q){return q.trim();});
+    var first=[];if(a.id==='faith')first.push(h('p',{class:'pf-say',text:FAITH_BRIDGE}));if(qs.length)first.push(pfQ(qs[0]));
+    var m=h('div',{class:'pf-mv'},pfStart(a.name,true,!!(d&&d.areas&&d.areas[a.id]),first));
+    qs.slice(1).forEach(function(q){m.append(pfQ(q));});
+    cols.append(m);});
+  var nx=h('div',{class:'pf-mv'},pfStart('Next step',false,false,pfQ(NEXT_Q,d&&d.his)));
+  nx.append(pfQ('Here is what I will do',d&&d.mine),pfQ('Next meeting date',d&&d.nextDate?fmtDay(d.nextDate):''));
+  nx.append(h('div',{class:'pf-q'},h('p',{class:'pf-qt'},bx(!!(d&&d.mat&&d.mat.dad)),'Dad Challenge handoff')));
+  cols.append(nx);
+  var notes=h('div',{class:'pf-notes'},h('div',{class:'pf-h',text:'NOTES'}),h('hr',{class:'pf-rule'}));
+  for(var i=0;i<5;i++)notes.append(pfLine());
+  p1.append(notes);
+  var p2=h('div',{class:'pf-page'});
+  p2.append(h('div',{class:'pf-title',text:'Advocate record'}),h('hr',{class:'pf-rule'}));
+  function row(){var r=h('div',{class:'pf-row'});for(var j=0;j<arguments.length;j++)[].concat(arguments[j]).forEach(function(x){r.append(x);});return r;}
+  function lbl(t){return h('span',{class:'pf-lbl',text:t});}
+  function sub(t){return h('span',{class:'pf-sub',text:t});}
+  var m=(d&&d.mat)||{},rf=(d&&d.ref)||{};
+  p2.append(h('div',{class:'pf-sec',text:'Him'}),row(lbl('Name'),blank('l')),row(lbl('DOB'),blank(),lbl('ID'),blank()));
+  p2.append(h('div',{class:'pf-sec',text:'MOB'}),row(lbl('Name'),blank('l')),row(lbl('DOB'),blank(),lbl('ID'),blank()));
+  p2.append(h('div',{class:'pf-sec',text:'Family history'}),row(lbl('Other children'),sub('Boys'),blank('s'),sub('Girls'),blank('s'),lbl('Miscarriages'),blank('s'),lbl('Abortions'),blank('s')));
+  p2.append(row(lbl('Birth control'),opt('Yes'),opt('No'),sub('Notes'),blank('l')));
+  p2.append(h('div',{class:'pf-sec',text:'Spiritual'}),
+    row(lbl('Spiritual conversation'),opt('Yes',d&&d.spiritual===true),opt('No',d&&d.spiritual===false)),
+    row(lbl('Christian'),opt('Yes'),opt('No'),opt('Unknown')),
+    row(lbl('Gospel presented'),opt('Yes',d&&d.gospel===true),opt('No',d&&d.gospel===false)),
+    row(lbl('Did client accept Christ'),opt('Yes'),opt('No')));
+  p2.append(h('div',{class:'pf-sec',text:'Medical'}),row(lbl('Test results'),blank(),lbl('Estimated due date'),blank()));
+  p2.append(h('div',{class:'pf-sec',text:'Given'}),
+    row(lbl('Materials given'),MATERIALS.map(function(x){return opt(x[1],!!m[x[0]]);}),blank()),
+    row(lbl('Referrals given'),REFERRALS.map(function(x){return opt(x[1],!!rf[x[0]]);})));
+  p2.append(h('div',{class:'pf-sec',text:'Intentions before support'}),
+    row(sub('Advocate’s assessment'),['Unknown','Abortion minded','Abortion vulnerable','Intends to carry'].map(function(t){return opt(t);})),
+    row(sub('Client’s statement'),['Abortion','Intends to carry','Adopt','Undecided'].map(function(t){return opt(t);})));
+  var after=['Abortion minded','Likely to carry','Adoption','Undecided'];
+  p2.append(h('div',{class:'pf-sec',text:'Intentions after'}),
+    row(sub('Advocate’s assessment'),after.map(function(t){return opt(t);})),
+    row(sub('Client’s statement'),after.map(function(t){return opt(t);})));
+  p2.append(h('div',{class:'pf-sec',text:'Advocate'}),row(lbl('Advocate name'),blank('l')),row(lbl('Date'),blank()));
+  root.append(p1,p2);
+  return root;
+}
+var lastPrint=null;
+function clearPrintArea(){$('printArea').textContent='';}
+window.addEventListener('afterprint',clearPrintArea);
+function doPrint(d){
+  if(typeof window.print!=='function'){infoSheet('Printing is not available here','Use Share print file instead, then open the file and print it.');return;}
+  var pa=$('printArea');pa.textContent='';pa.append(buildPrint(d));
+  closeSheet();
+  window.print();
+  setTimeout(function(){
+    var once=function(){clearPrintArea();document.removeEventListener('pointerdown',once,true);};
+    document.addEventListener('pointerdown',once,true);},800);
+}
+function standalone(d){
+  var node=buildPrint(d);
+  return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Male Talking Points</title><style>'+
+    PF_CSS+'\n@page{size:letter;margin:0.5in}\nbody{margin:0;background:#fff}\n@media screen{.pf{max-width:7.5in;margin:0.4in auto;padding:0 0.25in}.pf-page{margin-bottom:0.5in}}\n</style></head><body>'+node.outerHTML+'</body></html>';
+}
+function sharePrint(d){
+  var html=standalone(d),name=d?'male_talking_points_drafted.html':'male_talking_points_blank.html';
+  var blob=new Blob([html],{type:'text/html'});
+  var file=null;try{file=new File([blob],name,{type:'text/html'});}catch(e){}
+  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:'Male Talking Points'}).then(closeSheet).catch(function(e){if(e&&e.name!=='AbortError')download(name,blob);});
+  }else{download(name,blob);closeSheet();}
+}
+function printSheet(d){
+  sheet({title:d?'Print drafted form':'Print blank form',body:[
+    h('p',{class:'notice',text:'Check that nothing you typed identifies him before printing.'}),
+    h('p',{class:'sub',text:d?'Only the covered areas, both commitments, the next meeting date, materials, referrals, spiritual conversation and Gospel presented are filled in. Every identity field stays blank.':'Every field prints empty.'}),
+    h('p',{class:'sub',text:'If the print button does nothing from the home screen, use Share print file and print it from Files.'})],
+    actions:[{label:'Print',cls:'primary',fn:function(){doPrint(d);}},{label:'Share print file',fn:function(){sharePrint(d);}},{label:'Cancel',fn:closeSheet}]});
+  lastPrint=d||null;
+}
+$('p-blank').addEventListener('click',function(){lastPrint=null;renderPreview();printSheet(null);});
+$('p-draft').addEventListener('click',function(){
+  loadAll().then(function(r){
+    var byId={};r[1].forEach(function(s){byId[s.id]=s;});
+    var list=r[0].sort(function(a,b){return b.rec.createdAt-a.rec.createdAt;});
+    if(!list.length){infoSheet('No sessions yet','Save a session first, or print the blank form.');return;}
+    sheet({title:'Choose a session',body:list.map(function(x){
+      return h('button',{class:'pick',onclick:function(){lastPrint=x.d;renderPreview();printSheet(x.d);}},
+        h('span',null,h('span',{text:fmtDay(x.d.date)}),h('br'),h('small',{class:'sub',text:x.d.initials||'No initials'})),
+        h('b',{text:byId[x.rec.id]?String(byId[x.rec.id].total):''}));}),
+      actions:[{label:'Cancel',fn:closeSheet}]});
+  });
+});
+var previewOn=false;
+$('p-prev').addEventListener('click',function(){previewOn=!previewOn;setSwitch(this,previewOn);renderPreview();});
+function clearPreview(){var p=$('p-preview');p.textContent='';p.classList.add('hidden');}
+function renderPreview(){
+  var p=$('p-preview');p.textContent='';
+  $('p-which').textContent=lastPrint?'Preview shows the drafted form from the '+fmtDay(lastPrint.date)+' session.':'Preview shows the blank form.';
+  if(!previewOn||!KEY){p.classList.add('hidden');return;}
+  p.classList.remove('hidden');
+  var node=buildPrint(lastPrint);p.append(node);
+  requestAnimationFrame(function(){var wpx=node.offsetWidth||720,avail=p.clientWidth-20,sc=Math.min(1,avail/wpx);
+    node.style.transform='scale('+sc+')';p.style.height=(node.offsetHeight*sc+24)+'px';});
+}
+window.addEventListener('resize',function(){if(current==='print'&&previewOn)renderPreview();});
+
+/* Settings */
+function card(title){var c=h('div',{class:'card'},h('h3',{text:title}));$('s-body').append(c);return c;}
+function saveRow(c,fn,extra){var st=h('p',{class:'status'});var b=h('button',{class:'btn primary'},'Save');
+  b.addEventListener('click',function(){b.disabled=true;Promise.resolve().then(fn).then(saveSettings).then(function(){st.textContent='Saved.';b.disabled=false;}).catch(function(e){st.textContent='Not saved: '+(e&&e.message||e);b.disabled=false;});});
+  var r=h('div',{class:'row'},b);if(extra)r.append(extra);c.append(r,st);return st;}
+function lines(t){return String(t).split('\n').map(function(x){return x.trim();}).filter(Boolean);}
+function renderSettings(){
+  var body=$('s-body');body.textContent='';
+  var c=card('Consent script and default mode');
+  var cs=h('textarea',{rows:5,'aria-label':'Consent script'});cs.value=S.consent;
+  var modeBox=h('div',{class:'seg'});var mode=S.mode;
+  segBtns(modeBox,[['ask','Ask each session'],['notes','Notes only']],function(){return mode;},function(v){mode=v||mode;});modeBox._sync();
+  c.append(cs,h('label',{class:'lbl',text:'Default mode'}),modeBox);
+  saveRow(c,function(){S.consent=cs.value.trim()||DEFAULT_CONSENT;S.mode=mode;},h('button',{class:'btn',onclick:function(){cs.value=DEFAULT_CONSENT;}},'Restore default'));
+
+  c=card('Question pool');
+  c.append(h('p',{class:'sub',text:'One question per line. Used by the feedback card and the printed form.'}));
+  var pools={};AREAS.forEach(function(a){var t=h('textarea',{rows:5,'aria-label':a.name});t.value=S.pool[a.id].join('\n');pools[a.id]=t;c.append(h('label',{class:'lbl',text:a.name}),t);});
+  saveRow(c,function(){AREAS.forEach(function(a){S.pool[a.id]=lines(pools[a.id].value);S.usedQ[a.id]=[];});},
+    h('button',{class:'btn',onclick:function(){AREAS.forEach(function(a){pools[a.id].value=DEFAULT_POOL[a.id].join('\n');});}},'Restore defaults'));
+
+  c=card('Area keywords and open question starters');
+  c.append(h('p',{class:'sub',text:'Comma separated. Reserved for transcript tagging, which is not part of this release.'}));
+  var kws={};AREAS.forEach(function(a){var t=h('textarea',{rows:2,'aria-label':a.name+' keywords'});t.value=S.kw[a.id];kws[a.id]=t;c.append(h('label',{class:'lbl',text:a.name}),t);});
+  var st=h('textarea',{rows:2,'aria-label':'Open question starters'});st.value=S.starters;
+  c.append(h('label',{class:'lbl',text:'Open question starters'}),st);
+  saveRow(c,function(){AREAS.forEach(function(a){S.kw[a.id]=kws[a.id].value.trim();});S.starters=st.value.trim();});
+
+  c=card('Rubric weights');
+  c.append(h('p',{class:'sub',text:'Each half is rescaled to total 50 when you save.'}));
+  var wins={},g=h('div',{class:'wgrid'});var nw=normWeights(S.weights);
+  c.append(h('h3',{class:'sp',text:'Coverage'}));
+  AREAS.forEach(function(a){var inp=h('input',{type:'number',min:0,step:'0.5',inputmode:'decimal','aria-label':a.name});inp.value=r1(nw.cov[a.id]);wins['cov.'+a.id]=inp;g.append(h('span',{text:a.name}),inp);});
+  c.append(g);g=h('div',{class:'wgrid'});c.append(h('h3',{class:'sp',text:'Listening'}));
+  LIS_ITEMS.forEach(function(x){var inp=h('input',{type:'number',min:0,step:'0.5',inputmode:'decimal','aria-label':x[1]});inp.value=r1(nw.lis[x[0]]);wins['lis.'+x[0]]=inp;g.append(h('span',{text:x[1]}),inp);});
+  c.append(g,h('p',{class:'sub',text:'Next steps splits 4, 3 and 3 parts for his commitment, your commitment and the next date.'}));
+  function fillW(w){Object.keys(wins).forEach(function(k){var p=k.split('.');wins[k].value=r1(w[p[0]][p[1]]);});}
+  saveRow(c,function(){var w={cov:{},lis:{}};Object.keys(wins).forEach(function(k){var p=k.split('.');w[p[0]][p[1]]=Number(wins[k].value)||0;});S.weights=normWeights(w);fillW(S.weights);},
+    h('button',{class:'btn',onclick:function(){fillW(DEFAULT_WEIGHTS);}},'Restore defaults'));
+
+  c=card('Flag steps');
+  c.append(h('p',{class:'sub',text:'One step per line. Start a line with * for a bullet or ! for large type. A short line ending in a colon becomes a heading. Phone numbers written with dots become call links.'}));
+  var fts={};FLAGS.forEach(function(fl){var t=h('textarea',{rows:7,'aria-label':fl.title});t.value=S.flags[fl.id];fts[fl.id]=t;
+    c.append(h('details',null,h('summary',{text:fl.title}),t));});
+  saveRow(c,function(){FLAGS.forEach(function(fl){S.flags[fl.id]=fts[fl.id].value.trim()||DEFAULT_FLAGS[fl.id];});},
+    h('button',{class:'btn',onclick:function(){FLAGS.forEach(function(fl){fts[fl.id].value=DEFAULT_FLAGS[fl.id];});}},'Restore defaults'));
+
+  c=card('Locking and retention');
+  var idle=h('input',{type:'number',min:1,max:60,inputmode:'numeric','aria-label':'Idle lock minutes'});idle.value=S.idle;
+  var ret=h('input',{type:'number',min:1,max:365,inputmode:'numeric','aria-label':'Retention days'});ret.value=S.retention;
+  c.append(h('div',{class:'wgrid'},h('span',{text:'Idle lock minutes'}),idle,h('span',{text:'Retention days'}),ret),
+    h('p',{class:'sub',text:'Sessions older than the retention limit are deleted at launch unless kept. Scores stay in your trend.'}));
+  saveRow(c,function(){S.idle=Math.min(60,Math.max(1,Math.round(Number(idle.value)||5)));S.retention=Math.min(365,Math.max(1,Math.round(Number(ret.value)||30)));idle.value=S.idle;ret.value=S.retention;bump();});
+
+  c=card('Persistent storage');
+  var ps=h('p',{class:'sub',text:'Checking.'});c.append(ps);
+  var pb=h('button',{class:'btn'},'Ask for persistent storage');c.append(pb);
+  function chk(){try{if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(function(v){ps.textContent=v?'Granted. The browser will not clear this data on its own.':'Not granted yet. Install to the home screen for durable storage, then ask again.';});}else ps.textContent='This browser does not report storage status.';}catch(e){ps.textContent='This browser does not report storage status.';}}
+  chk();pb.addEventListener('click',function(){requestPersist().then(chk);});
+
+  c=card('Change passphrase');
+  var o=h('input',{type:'password',placeholder:'Current passphrase',autocomplete:'current-password','aria-label':'Current passphrase'});
+  var n1=h('input',{type:'password',placeholder:'New passphrase, 8 characters or more',autocomplete:'new-password','aria-label':'New passphrase'});
+  var n2=h('input',{type:'password',placeholder:'New passphrase again',autocomplete:'new-password','aria-label':'New passphrase again'});
+  var cps=h('p',{class:'status'});var cpb=h('button',{class:'btn primary'},'Change passphrase');
+  c.append(o,h('div',{style:'height:8px'}),n1,h('div',{style:'height:8px'}),n2,h('p',{class:'warnbox',text:'A forgotten passphrase means the data cannot be recovered.'}),cpb,cps);
+  cpb.addEventListener('click',function(){
+    if(n1.value.length<8){cps.textContent='Use at least 8 characters.';return;}
+    if(n1.value!==n2.value){cps.textContent='The new passphrases do not match.';return;}
+    cpb.disabled=true;cps.textContent='Checking and encrypting every record again.';
+    changePass(o.value,n1.value).then(function(){cps.textContent='Passphrase changed.';o.value=n1.value=n2.value='';cpb.disabled=false;})
+      .catch(function(e){cps.textContent=e.message||String(e);cpb.disabled=false;});
+  });
+
+  c=card('Encrypted backup');
+  c.append(h('p',{class:'sub',text:'The backup file stays encrypted with the passphrase in use when you make it. Importing merges sessions by id.'}));
+  var bs=h('p',{class:'status'});
+  c.append(h('div',{class:'row'},h('button',{class:'btn primary',onclick:function(){exportBackup().then(function(n){bs.textContent='Backup saved with '+n+' sessions.';});}},'Export backup'),
+    h('button',{class:'btn',onclick:function(){pickBackup(false,bs);}},'Import backup')),bs);
+
+  c=card('Plain text summary');
+  c.append(h('p',{class:'sub',text:'A readable .txt file of initials, areas, commitments, dates and scores.'}),
+    h('button',{class:'btn wide',onclick:summarySheet},'Export plain text summary'));
+
+  c=card('Panic wipe');
+  c.append(h('p',{class:'sub',text:'Deletes every session, score and setting on this device and returns to first run.'}),
+    h('button',{class:'btn danger wide',onclick:wipeSheet},'Panic wipe'));
+}
+
+/* Passphrase change */
+function changePass(oldP,newP){
+  var salt2=crypto.getRandomValues(new Uint8Array(16)),k2;
+  return Promise.all([getMeta('salt'),getMeta('iter'),getMeta('check')]).then(function(m){
+    return deriveKey(oldP,m[0],m[1]).then(function(k){return decWith(k,m[2]).catch(function(){throw new Error('The current passphrase is not right.');});});
+  }).then(function(){return deriveKey(newP,salt2,ITER);}).then(function(k){k2=k;return Promise.all([getAll('sessions'),getAll('scores')]);
+  }).then(function(r){
+    var jobs=[],writes=[];
+    r[0].forEach(function(rec){jobs.push(dec(rec).then(function(d){return encWith(k2,d);}).then(function(e){writes.push(['sessions',{id:rec.id,createdAt:rec.createdAt,keep:rec.keep,iv:e.iv,ct:e.ct}]);}));});
+    r[1].forEach(function(rec){jobs.push(dec(rec).then(function(d){return encWith(k2,d);}).then(function(e){writes.push(['scores',{id:rec.id,iv:e.iv,ct:e.ct}]);}));});
+    jobs.push(encWith(k2,CHECK).then(function(e){writes.push(['meta',{k:'check',v:e}]);}));
+    jobs.push(encWith(k2,S).then(function(e){writes.push(['meta',{k:'settings',v:e}]);}));
+    return Promise.all(jobs).then(function(){writes.push(['meta',{k:'salt',v:salt2}],['meta',{k:'iter',v:ITER}]);return putMany(writes);});
+  }).then(function(){KEY=k2;});
+}
+
+/* Backup */
+function pack(x){return {iv:b64(x.iv),ct:b64(x.ct)};}
+function unpack(x){return {iv:unb64(x.iv),ct:unb64(x.ct)};}
+function exportBackup(){
+  return Promise.all([getMeta('salt'),getMeta('iter'),getMeta('check'),getMeta('settings'),getAll('sessions'),getAll('scores')]).then(function(m){
+    var out={format:1,app:'sessioncoach',created:new Date().toISOString(),salt:b64(m[0]),iter:m[1],check:pack(m[2]),settings:pack(m[3]),
+      sessions:m[4].map(function(r){var p=pack(r);p.id=r.id;p.createdAt=r.createdAt;p.keep=!!r.keep;return p;}),
+      scores:m[5].map(function(r){var p=pack(r);p.id=r.id;return p;})};
+    download('sessioncoach_backup_'+isoKey(new Date())+'.json',new Blob([JSON.stringify(out)],{type:'application/json'}));
+    return m[4].length;});
+}
+function pickBackup(first,statusEl){
+  var inp=h('input',{type:'file',accept:'application/json,.json',style:'display:none'});
+  inp.addEventListener('change',function(){var f=inp.files&&inp.files[0];inp.remove();if(!f)return;
+    f.text().then(function(t){var j=JSON.parse(t);if(!j||j.app!=='sessioncoach'||j.format!==1)throw new Error('This is not a Session Coach backup.');backupPassSheet(j,first,statusEl);})
+      .catch(function(e){infoSheet('Cannot read that file',e.message||String(e));});});
+  document.body.append(inp);inp.click();
+}
+function backupPassSheet(j,first,statusEl){
+  var p=h('input',{type:'password',placeholder:'Passphrase for this backup',autocomplete:'off','aria-label':'Backup passphrase'});
+  var msg=h('p',{class:'msg'});
+  var sh=sheet({title:first?'Restore backup':'Import backup',sticky:true,body:[h('p',{class:'sub',text:'Enter the passphrase that was in use when this backup was made.'+(first?' It becomes your passphrase on this device.':'')}),p,msg],
+    actions:[{label:first?'Restore':'Import',cls:'primary',fn:function(){
+      msg.textContent='Checking.';
+      var salt=unb64(j.salt);
+      deriveKey(p.value,salt,j.iter).then(function(k){
+        return decWith(k,unpack(j.check)).then(function(v){if(v!==CHECK)throw 0;return k;}).catch(function(){throw new Error('That passphrase does not open this backup.');});
+      }).then(function(k){return first?restoreFirst(j,k,salt):mergeBackup(j,k);
+      }).then(function(n){closeSheet();if(first){requestPersist();enterApp();}else{if(statusEl)statusEl.textContent='Imported '+n+' sessions.';}
+      }).catch(function(e){msg.textContent=e.message||String(e);});}},{label:'Cancel',fn:closeSheet}]});
+  setTimeout(function(){p.focus();},50);return sh;
+}
+function restoreFirst(j,k,salt){
+  var w=[['meta',{k:'salt',v:salt}],['meta',{k:'iter',v:j.iter}],['meta',{k:'check',v:unpack(j.check)}],['meta',{k:'settings',v:unpack(j.settings)}]];
+  j.sessions.forEach(function(r){var u=unpack(r);w.push(['sessions',{id:r.id,createdAt:r.createdAt,keep:!!r.keep,iv:u.iv,ct:u.ct}]);});
+  j.scores.forEach(function(r){var u=unpack(r);w.push(['scores',{id:r.id,iv:u.iv,ct:u.ct}]);});
+  return decWith(k,unpack(j.settings)).then(function(st){S=mergeSettings(st);KEY=k;w.push(['meta',{k:'purgeDays',v:S.retention}]);return putMany(w);}).then(function(){return j.sessions.length;});
+}
+function mergeBackup(j,k){
+  var w=[],jobs=[];
+  j.sessions.forEach(function(r){jobs.push(decWith(k,unpack(r)).then(enc).then(function(e){w.push(['sessions',{id:r.id,createdAt:r.createdAt,keep:!!r.keep,iv:e.iv,ct:e.ct}]);}));});
+  j.scores.forEach(function(r){jobs.push(decWith(k,unpack(r)).then(enc).then(function(e){w.push(['scores',{id:r.id,iv:e.iv,ct:e.ct}]);}));});
+  return Promise.all(jobs).then(function(){return w.length?putMany(w):null;}).then(function(){return j.sessions.length;});
+}
+
+/* Plain text summary */
+function summarySheet(){
+  sheet({title:'Unencrypted export',coral:true,body:[h('p',{class:'warnbox',text:'This file is not encrypted. Anyone who opens it can read it. Keep it off shared drives and delete it when you are done.'})],
+    actions:[{label:'Export anyway',cls:'primary',fn:function(){
+      loadAll().then(function(r){var byId={};r[1].forEach(function(s){byId[s.id]=s;});
+        var out=['Session Coach summary','Exported '+fmtDay(localISO(new Date())),''];
+        r[0].sort(function(a,b){return a.rec.createdAt-b.rec.createdAt;}).forEach(function(x){var d=x.d,sc=byId[x.rec.id];
+          out.push('Date: '+fmtDay(d.date));out.push('Initials: '+(d.initials||'none'));
+          out.push('Areas: '+(AREAS.filter(function(a){return d.areas[a.id];}).map(function(a){return a.name;}).join(', ')||'none'));
+          out.push('His commitment: '+(d.his||'none'));out.push('Your commitment: '+(d.mine||'none'));
+          out.push('Next meeting: '+(d.nextDate?fmtDay(d.nextDate):'none'));
+          if(sc)out.push('Score: '+sc.total+' (coverage '+r1(sc.coverage)+', listening '+r1(sc.listening)+')');
+          out.push('');});
+        download('sessioncoach_summary_'+isoKey(new Date())+'.txt',new Blob([out.join('\n')],{type:'text/plain'}));closeSheet();});}},
+      {label:'Cancel',fn:closeSheet}]});
+}
+
+/* Panic wipe */
+function wipeSheet(){
+  var inp=h('input',{type:'text',placeholder:'Type WIPE',autocapitalize:'characters',autocomplete:'off',spellcheck:'false','aria-label':'Type WIPE to confirm'});
+  var sh=sheet({title:'Panic wipe',coral:true,sticky:true,body:[h('p',{class:'warnbox',text:'This deletes every session, score and setting on this device. It cannot be undone.'}),inp],
+    actions:[{label:'Wipe everything',cls:'danger',fn:doWipe},{label:'Cancel',fn:closeSheet}]});
+  var btn=sh.querySelector('.sh-acts .btn');btn.disabled=true;
+  inp.addEventListener('input',function(){btn.disabled=inp.value.trim()!=='WIPE';});
+  function doWipe(){if(inp.value.trim()!=='WIPE')return;
+    KEY=null;S=null;try{db.close();}catch(e){}lsClear();
+    var r=indexedDB.deleteDatabase(DBN);var done=function(){location.reload();};r.onsuccess=done;r.onerror=done;r.onblocked=function(){setTimeout(done,300);};}
+  setTimeout(function(){inp.focus();},50);
+}
+
+/* Purge and launch */
+function purge(){
+  return getMeta('purgeDays').then(function(days){days=Number(days)||30;var cut=Date.now()-days*DAY;
+    return getAll('sessions').then(function(all){var doomed=all.filter(function(r){return !r.keep&&r.createdAt<cut;});
+      if(!doomed.length)return 0;
+      return tx('sessions','readwrite',function(t){doomed.forEach(function(r){t.objectStore('sessions').delete(r.id);});}).then(function(){return doomed.length;});});});
+}
+buildForm();F=blankForm();
+window.SessionCoach=Object.freeze({score:score,feedback:feedback});
+openDB().then(function(d){db=d;db.onversionchange=function(){db.close();};return purge();}).then(showLock).catch(function(e){
+  $('lock-unlock').classList.remove('hidden');lockMsg('Storage is not available in this browser: '+(e&&e.message||e));$('l-go').disabled=true;});
+})();
+</script>
+</body>
+</html>
